@@ -45,6 +45,14 @@ class Product extends Model
     }
 
     /**
+     * Quantity a customer can buy right now; inactive products count as unavailable.
+     */
+    public function availableQuantity(): int
+    {
+        return $this->status === ProductStatus::Active ? $this->stock_quantity : 0;
+    }
+
+    /**
      * @param  Builder<self>  $query
      */
     #[Scope]

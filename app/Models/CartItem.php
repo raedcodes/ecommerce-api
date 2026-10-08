@@ -15,6 +15,11 @@ class CartItem extends Model
     use HasFactory;
 
     /**
+     * Upper bound of the unsigned INT quantity column; keeps arithmetic on quantities within PHP int range.
+     */
+    public const MAX_QUANTITY = 4_294_967_295;
+
+    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
@@ -40,5 +45,21 @@ class CartItem extends Model
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    /**
+     * Line total in cents at the product's current price.
+     */
+    public function lineTotal(): int
+    {
+        return $this->product->price * $this->quantity;
+    }
+
+    /**
+     * Whether the requested quantity can currently be bought.
+     */
+    public function isAvailable(): bool
+    {
+        return $this->quantity <= $this->product->availableQuantity();
     }
 }

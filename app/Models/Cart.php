@@ -36,4 +36,12 @@ class Cart extends Model
     {
         return $this->belongsTo(Promotion::class);
     }
+
+    /**
+     * Subtotal in cents at current product prices.
+     */
+    public function subtotal(): int
+    {
+        return $this->items->sum(fn (CartItem $item) => $item->lineTotal());
+    }
 }
