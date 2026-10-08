@@ -13,8 +13,6 @@ use Illuminate\Validation\Rule;
  */
 class ProductIndexRequest extends FormRequest
 {
-    public const DEFAULT_PER_PAGE = 15;
-
     public const MAX_PER_PAGE = 100;
 
     public const FILTERS = ['name', 'min_price', 'max_price', 'in_stock'];

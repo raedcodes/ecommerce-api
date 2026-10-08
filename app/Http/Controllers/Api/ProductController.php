@@ -16,7 +16,7 @@ class ProductController extends Controller
         $products = $catalog
             ->paginate(
                 $request->catalogQuery(),
-                $request->integer('per_page', ProductIndexRequest::DEFAULT_PER_PAGE),
+                $request->integer('per_page', 15),
                 $request->integer('page', 1),
             )
             ->appends($request->safe()->except('page'));

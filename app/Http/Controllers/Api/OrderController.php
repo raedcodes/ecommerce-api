@@ -11,8 +11,6 @@ use Illuminate\Support\Facades\Gate;
 
 class OrderController extends Controller
 {
-    public const DEFAULT_PER_PAGE = 15;
-
     /**
      * The customer's own orders, newest first.
      */
@@ -27,7 +25,7 @@ class OrderController extends Controller
             ->with('items')
             ->latest()
             ->orderByDesc('id')
-            ->paginate($validated['per_page'] ?? self::DEFAULT_PER_PAGE)
+            ->paginate($validated['per_page'] ?? 15)
             ->withQueryString();
 
         return OrderResource::collection($orders);
