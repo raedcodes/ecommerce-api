@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CartItemController;
 use App\Http\Controllers\Api\CartPromotionController;
 use App\Http\Controllers\Api\CheckoutController;
+use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ProductController;
 use Illuminate\Support\Facades\Route;
 
@@ -31,4 +32,8 @@ Route::middleware('auth:sanctum')->group(function () {
         ->names('cart.promotion');
 
     Route::post('checkout', CheckoutController::class)->name('checkout');
+
+    Route::apiResource('orders', OrderController::class)
+        ->only(['index', 'show'])
+        ->where(['order' => '[0-9]+']);
 });
