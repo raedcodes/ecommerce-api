@@ -28,7 +28,10 @@ class PromotionController extends Controller
 
     public function store(PromotionRequest $request): PromotionResource
     {
-        return new PromotionResource(Promotion::create($request->promotionAttributes()));
+        $validated = $request->promotionAttributes();
+        $promotion = Promotion::create($validated);
+
+        return new PromotionResource($promotion);
     }
 
     public function show(Promotion $promotion): PromotionResource
@@ -38,7 +41,8 @@ class PromotionController extends Controller
 
     public function update(PromotionRequest $request, Promotion $promotion): PromotionResource
     {
-        $promotion->update($request->promotionAttributes());
+        $validated = $request->promotionAttributes();
+        $promotion->update($validated);
 
         return new PromotionResource($promotion);
     }
