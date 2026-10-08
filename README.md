@@ -7,7 +7,7 @@ A Laravel REST API for an e-commerce backend: product catalog, customer cart, pr
 | | |
 |---|---|
 | Stack | Laravel 13.35 · PHP 8.3 · MySQL 8 / MariaDB · Laravel Sanctum · spatie/laravel-query-builder · L5-Swagger · Pest 4 |
-| Tests | 243 tests (237 feature/unit + 6 multi-process concurrency) |
+| Tests | 250 tests (244 feature/unit + 6 multi-process concurrency); every API route is exercised |
 | API docs | Swagger UI at `/api/documentation` · OpenAPI JSON at `/docs` and in [`storage/api-docs/api-docs.json`](storage/api-docs/api-docs.json) |
 
 ## Contents
@@ -122,7 +122,19 @@ php artisan db:seed           # safe to re-run: every seeder is idempotent
 ## 4. API documentation
 
 - **Swagger UI:** `http://localhost:8000/api/documentation`. Click **Authorize** and paste a token from `POST /api/auth/login`.
-- **Postman:** *Import → Link* `http://localhost:8000/docs`, or *Import → File* [`storage/api-docs/api-docs.json`](storage/api-docs/api-docs.json). Postman builds the whole collection from the OpenAPI document.
+- **Postman:** *Import → File* [`storage/api-docs/api-docs.json`](storage/api-docs/api-docs.json) (or *Import → Link* `http://localhost:8000/docs` in the desktop app), with **Folder organization: Tags**. Postman builds the whole collection from the OpenAPI document. Then two one-time steps on the collection:
+  1. **Variables:** set `baseUrl` to `http://localhost:8000` (the docs use a relative server URL).
+  2. **Scripts → Post-response:** paste this, so logging in or registering stores the token for every request, and logging out clears it:
+     ```js
+     if (pm.request.url.getPath().endsWith('/api/auth/logout') && pm.response.code === 204) {
+         pm.collectionVariables.unset('bearerToken');
+     } else {
+         try {
+             const token = pm.response.json()?.data?.token;
+             if (token) pm.collectionVariables.set('bearerToken', token);
+         } catch (e) { /* not JSON, e.g. 204 */ }
+     }
+     ```
 - **Regenerate** after changing an endpoint: `php artisan l5-swagger:generate`. A test fails if the committed JSON is out of date or if any route is undocumented.
 
 ### Conventions

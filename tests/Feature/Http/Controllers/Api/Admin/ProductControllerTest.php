@@ -70,6 +70,12 @@ describe('show', function () {
             ->assertOk()
             ->assertJsonPath('data.status', 'inactive');
     });
+
+    test('it returns 404 product_not_found for a missing product', function () {
+        $this->getJson('/api/admin/products/999999')
+            ->assertNotFound()
+            ->assertJsonPath('code', 'product_not_found');
+    });
 });
 
 describe('update', function () {
@@ -83,6 +89,14 @@ describe('update', function () {
             ->assertJsonPath('data.name', 'Desk Lamp');
 
         $this->getJson('/api/products')->assertJsonPath('data.0.price', '12.50');
+    });
+
+    test('it accepts PUT as well as PATCH', function () {
+        $product = Product::factory()->create(['stock_quantity' => 1]);
+
+        $this->putJson("/api/admin/products/{$product->id}", ['stock_quantity' => 40])
+            ->assertOk()
+            ->assertJsonPath('data.stock_quantity', 40);
     });
 
     test('deactivating a product hides it from customers', function () {

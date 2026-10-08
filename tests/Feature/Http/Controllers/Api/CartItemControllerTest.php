@@ -112,6 +112,19 @@ describe('update', function () {
         expect($item->fresh()->quantity)->toBe(4);
     });
 
+    test('it accepts PUT as well as PATCH', function () {
+        $user = User::factory()->create();
+        $item = CartItem::factory()
+            ->for(Cart::factory()->for($user))
+            ->for(Product::factory()->state(['stock_quantity' => 10]))
+            ->create(['quantity' => 1]);
+        Sanctum::actingAs($user);
+
+        $this->putJson("/api/cart/items/{$item->id}", ['quantity' => 3])
+            ->assertOk()
+            ->assertJsonPath('data.items.0.quantity', 3);
+    });
+
     test('it returns 422 insufficient_stock when the quantity exceeds the stock', function () {
         $user = User::factory()->create();
         $item = CartItem::factory()

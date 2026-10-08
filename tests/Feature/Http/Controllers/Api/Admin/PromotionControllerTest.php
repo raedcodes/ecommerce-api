@@ -11,6 +11,21 @@ beforeEach(function () {
     Sanctum::actingAs(User::factory()->admin()->create());
 });
 
+describe('index', function () {
+    test('it lists promotions newest first with their usage', function () {
+        $older = Promotion::factory()->create(['code' => 'OLDER']);
+        $newer = Promotion::factory()->fixed(1050)->create(['code' => 'NEWER']);
+        $newer->forceFill(['times_used' => 3])->save();
+
+        $this->getJson('/api/admin/promotions')
+            ->assertOk()
+            ->assertJsonPath('data.*.id', [$newer->id, $older->id])
+            ->assertJsonPath('data.0.value', '10.50')
+            ->assertJsonPath('data.0.times_used', 3)
+            ->assertJsonPath('meta.total', 2);
+    });
+});
+
 describe('store', function () {
     test('it creates the SUMMER20 example from the requirements', function () {
         $this->postJson('/api/admin/promotions', [
@@ -75,6 +90,25 @@ describe('store', function () {
     ]);
 });
 
+describe('show', function () {
+    test('it shows a promotion with amounts in dollars', function () {
+        $promotion = Promotion::factory()->percentage(20)->create(['code' => 'SUMMER20', 'min_cart_amount' => 10000, 'max_discount_amount' => 5000]);
+
+        $this->getJson("/api/admin/promotions/{$promotion->id}")
+            ->assertOk()
+            ->assertJsonPath('data.code', 'SUMMER20')
+            ->assertJsonPath('data.value', 20)
+            ->assertJsonPath('data.min_cart_amount', '100.00')
+            ->assertJsonPath('data.max_discount_amount', '50.00');
+    });
+
+    test('it returns 404 promotion_not_found for a missing promotion', function () {
+        $this->getJson('/api/admin/promotions/999999')
+            ->assertNotFound()
+            ->assertExactJson(['message' => 'Promotion not found.', 'code' => 'promotion_not_found']);
+    });
+});
+
 describe('update', function () {
     test('it changes only the submitted fields', function () {
         $promotion = Promotion::factory()->percentage(20)->create(['code' => 'SUMMER20']);
@@ -84,6 +118,14 @@ describe('update', function () {
             ->assertJsonPath('data.is_active', false)
             ->assertJsonPath('data.code', 'SUMMER20')
             ->assertJsonPath('data.value', 20);
+    });
+
+    test('it accepts PUT as well as PATCH', function () {
+        $promotion = Promotion::factory()->percentage(20)->create();
+
+        $this->putJson("/api/admin/promotions/{$promotion->id}", ['value' => 25])
+            ->assertOk()
+            ->assertJsonPath('data.value', 25);
     });
 
     test('it checks a new end date against the stored start date', function () {
