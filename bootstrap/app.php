@@ -42,7 +42,7 @@ return Application::configure(basePath: dirname(__DIR__))
                 return null;
             }
 
-            return response()->json(['message' => 'Unauthenticated.', 'code' => 'unauthenticated'], 401);
+            return response()->json(['message' => 'Unauthenticated.', 'code' => 'unauthenticated'], Response::HTTP_UNAUTHORIZED);
         });
 
         $exceptions->render(function (ValidationException $e, Request $request): ?JsonResponse {
@@ -71,7 +71,7 @@ return Application::configure(basePath: dirname(__DIR__))
                 return response()->json([
                     'message' => Str::ucfirst(str_replace('_', ' ', $resource)).' not found.',
                     'code' => "{$resource}_not_found",
-                ], 404);
+                ], Response::HTTP_NOT_FOUND);
             }
 
             $statusText = Response::$statusTexts[$e->getStatusCode()] ?? 'Error';

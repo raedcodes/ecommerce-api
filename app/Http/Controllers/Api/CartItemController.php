@@ -10,6 +10,7 @@ use App\Models\Product;
 use App\Services\CartService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class CartItemController extends Controller
 {
@@ -23,7 +24,7 @@ class CartItemController extends Controller
             $request->integer('quantity'),
         );
 
-        return (new CartResource($cart))->response()->setStatusCode(201);
+        return (new CartResource($cart))->response()->setStatusCode(Response::HTTP_CREATED);
     }
 
     public function update(UpdateCartItemRequest $request, string $item): CartResource

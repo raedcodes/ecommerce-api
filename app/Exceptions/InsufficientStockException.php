@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use App\Models\Product;
+use Illuminate\Http\Response;
 use Illuminate\Support\Str;
 
 final class InsufficientStockException extends ApiException
@@ -16,7 +17,7 @@ final class InsufficientStockException extends ApiException
             ? self::describe($shortages[0])
             : 'Some items exceed the available stock.';
 
-        return new self($message, 'insufficient_stock', 422, ['items' => $shortages]);
+        return new self($message, 'insufficient_stock', Response::HTTP_UNPROCESSABLE_ENTITY, ['items' => $shortages]);
     }
 
     public static function forProduct(Product $product, int $requested): self

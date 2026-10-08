@@ -19,7 +19,7 @@ class AuthController extends Controller
     {
         $user = User::create($request->safe()->only(['name', 'email', 'password']));
 
-        return $this->tokenResponse($user, 201);
+        return $this->tokenResponse($user, Response::HTTP_CREATED);
     }
 
     public function login(LoginRequest $request): JsonResponse
@@ -32,7 +32,7 @@ class AuthController extends Controller
             ]);
         }
 
-        return $this->tokenResponse($user, 200);
+        return $this->tokenResponse($user, Response::HTTP_OK);
     }
 
     /**
