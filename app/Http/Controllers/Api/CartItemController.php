@@ -14,6 +14,8 @@ use OpenApi\Attributes as OA;
 
 class CartItemController extends Controller
 {
+    public function __construct(private CartService $carts) {}
+
     #[OA\Post(
         path: '/api/cart/items',
         operationId: 'addCartItem',
@@ -77,9 +79,9 @@ class CartItemController extends Controller
             new OA\Response(ref: '#/components/responses/TooManyRequests', response: 429),
         ],
     )]
-    public function store(StoreCartItemRequest $request, CartService $carts): JsonResponse
+    public function store(StoreCartItemRequest $request): JsonResponse
     {
-        $cart = $carts->addItem(
+        $cart = $this->carts->addItem(
             $request->user(),
             Product::findOrFail($request->validated('product_id')),
             $request->integer('quantity'),
@@ -158,9 +160,9 @@ class CartItemController extends Controller
             new OA\Response(ref: '#/components/responses/TooManyRequests', response: 429),
         ],
     )]
-    public function update(UpdateCartItemRequest $request, string $item, CartService $carts): CartResource
+    public function update(UpdateCartItemRequest $request, string $item): CartResource
     {
-        return new CartResource($carts->updateItem($request->user(), $item, $request->integer('quantity')));
+        return new CartResource($this->carts->updateItem($request->user(), $item, $request->integer('quantity')));
     }
 
     #[OA\Delete(
@@ -191,8 +193,8 @@ class CartItemController extends Controller
             new OA\Response(ref: '#/components/responses/TooManyRequests', response: 429),
         ],
     )]
-    public function destroy(Request $request, string $item, CartService $carts): CartResource
+    public function destroy(Request $request, string $item): CartResource
     {
-        return new CartResource($carts->removeItem($request->user(), $item));
+        return new CartResource($this->carts->removeItem($request->user(), $item));
     }
 }

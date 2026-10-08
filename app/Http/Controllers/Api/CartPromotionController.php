@@ -11,6 +11,8 @@ use OpenApi\Attributes as OA;
 
 class CartPromotionController extends Controller
 {
+    public function __construct(private CartService $carts) {}
+
     #[OA\Post(
         path: '/api/cart/promotion',
         operationId: 'applyPromotion',
@@ -89,9 +91,9 @@ class CartPromotionController extends Controller
             new OA\Response(ref: '#/components/responses/TooManyRequests', response: 429),
         ],
     )]
-    public function store(ApplyPromotionRequest $request, CartService $carts): CartResource
+    public function store(ApplyPromotionRequest $request): CartResource
     {
-        return new CartResource($carts->applyPromotion($request->user(), $request->validated('code')));
+        return new CartResource($this->carts->applyPromotion($request->user(), $request->validated('code')));
     }
 
     #[OA\Delete(
@@ -112,8 +114,8 @@ class CartPromotionController extends Controller
             new OA\Response(ref: '#/components/responses/TooManyRequests', response: 429),
         ],
     )]
-    public function destroy(Request $request, CartService $carts): CartResource
+    public function destroy(Request $request): CartResource
     {
-        return new CartResource($carts->removePromotion($request->user()));
+        return new CartResource($this->carts->removePromotion($request->user()));
     }
 }
