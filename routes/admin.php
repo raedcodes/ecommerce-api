@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::apiResource('products', ProductController::class)
     ->except(['destroy'])
-    ->where(['product' => '[0-9]+']);
+    ->whereNumber('product');
 
-Route::apiResource('promotions', PromotionController::class)
-    ->where(['promotion' => '[0-9]+']);
+Route::apiResource('promotions', PromotionController::class)->whereNumber('promotion');

@@ -17,7 +17,9 @@ Route::prefix('auth')->name('auth.')->group(function () {
 });
 
 Route::get('products', [ProductController::class, 'index'])->name('products.index');
-Route::get('products/{product}', [ProductController::class, 'show'])->whereNumber('product')->name('products.show');
+Route::get('products/{product}', [ProductController::class, 'show'])
+    ->whereNumber('product')
+    ->name('products.show');
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('cart', [CartController::class, 'show'])->name('cart.show');
@@ -25,7 +27,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('cart/items', CartItemController::class)
         ->only(['store', 'update', 'destroy'])
         ->names('cart.items')
-        ->where(['item' => '[0-9]+']);
+        ->whereNumber('item');
 
     Route::apiSingleton('cart/promotion', CartPromotionController::class)
         ->creatable()
@@ -36,6 +38,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('orders', OrderController::class)
         ->only(['index', 'show'])
-        ->where(['order' => '[0-9]+']);
+        ->whereNumber('order');
     Route::post('orders/{order}/cancel', CancelOrderController::class)->whereNumber('order')->name('orders.cancel');
 });
