@@ -675,78 +675,6 @@
                 ]
             }
         },
-        "/api/orders/{order}/cancel": {
-            "post": {
-                "tags": [
-                    "Orders"
-                ],
-                "summary": "Cancel an order",
-                "description": "Allowed while pending or processing. Restores the purchased stock and gives back the coupon use. Safe to send more than once: stock is restored exactly once.",
-                "operationId": "cancelOrder",
-                "parameters": [
-                    {
-                        "name": "order",
-                        "in": "path",
-                        "description": "Order id.",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "The cancelled order. Repeating the request returns 200 and changes nothing.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/components/schemas/Order"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "$ref": "#/components/responses/Unauthenticated"
-                    },
-                    "403": {
-                        "$ref": "#/components/responses/Forbidden"
-                    },
-                    "404": {
-                        "$ref": "#/components/responses/NotFound"
-                    },
-                    "409": {
-                        "description": "The order has shipped or been delivered (`invalid_order_status`).",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Error"
-                                },
-                                "example": {
-                                    "message": "Orders that are shipped can no longer be cancelled.",
-                                    "code": "invalid_order_status",
-                                    "details": {
-                                        "status": "shipped"
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "429": {
-                        "$ref": "#/components/responses/TooManyRequests"
-                    }
-                },
-                "security": [
-                    {
-                        "sanctum": []
-                    }
-                ]
-            }
-        },
         "/api/cart": {
             "get": {
                 "tags": [
@@ -1439,6 +1367,78 @@
                     },
                     "404": {
                         "$ref": "#/components/responses/NotFound"
+                    },
+                    "429": {
+                        "$ref": "#/components/responses/TooManyRequests"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/orders/{order}/cancel": {
+            "post": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Cancel an order",
+                "description": "Allowed while pending or processing. Restores the purchased stock and gives back the coupon use. Safe to send more than once: stock is restored exactly once.",
+                "operationId": "cancelOrder",
+                "parameters": [
+                    {
+                        "name": "order",
+                        "in": "path",
+                        "description": "Order id.",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The cancelled order. Repeating the request returns 200 and changes nothing.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/Order"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthenticated"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "409": {
+                        "description": "The order has shipped or been delivered (`invalid_order_status`).",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                },
+                                "example": {
+                                    "message": "Orders that are shipped can no longer be cancelled.",
+                                    "code": "invalid_order_status",
+                                    "details": {
+                                        "status": "shipped"
+                                    }
+                                }
+                            }
+                        }
                     },
                     "429": {
                         "$ref": "#/components/responses/TooManyRequests"
