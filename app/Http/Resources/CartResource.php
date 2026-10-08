@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Cart;
+use App\Services\CartSummary;
 use App\Support\Money;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -10,7 +10,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 /**
  * Prices are always the products' current prices; nothing price-related is stored on the cart.
  *
- * @mixin Cart
+ * @property CartSummary $resource
  */
 class CartResource extends JsonResource
 {
@@ -21,13 +21,24 @@ class CartResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $subtotal = $this->subtotal();
+        $summary = $this->resource;
+        $cart = $summary->cart;
 
         return [
-            'items' => CartItemResource::collection($this->items),
-            'item_count' => $this->items->sum('quantity'),
-            'subtotal' => Money::format($subtotal),
-            'total' => Money::format($subtotal),
+            'items' => CartItemResource::collection($cart->items),
+            'item_count' => $cart->items->sum('quantity'),
+            'subtotal' => Money::format($summary->subtotal),
+            'promotion' => $cart->promotion === null ? null : [
+                'code' => $cart->promotion->code,
+                'type' => $cart->promotion->type,
+                'is_valid' => $summary->promotionError === null,
+                'error' => $summary->promotionError === null ? null : [
+                    'code' => $summary->promotionError->errorCode,
+                    'message' => $summary->promotionError->getMessage(),
+                ],
+            ],
+            'discount' => Money::format($summary->discount),
+            'total' => Money::format($summary->total()),
         ];
     }
 }

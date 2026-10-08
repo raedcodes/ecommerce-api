@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Enums\OrderStatus;
 use App\Enums\PromotionType;
 use Database\Factories\PromotionFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[Fillable([
     'code',
@@ -49,13 +51,43 @@ class Promotion extends Model
 
     /**
      * Codes are stored trimmed and upper-cased so lookups are case-insensitive.
-     *
+     */
+    public static function normalizeCode(string $code): string
+    {
+        return strtoupper(trim($code));
+    }
+
+    public static function findByCode(string $code): ?self
+    {
+        return self::query()->where('code', self::normalizeCode($code))->first();
+    }
+
+    /**
+     * @return HasMany<Order, $this>
+     */
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    /**
+     * Times the customer has used this code; cancelled orders give the use back.
+     */
+    public function timesUsedBy(User $customer): int
+    {
+        return $this->orders()
+            ->whereBelongsTo($customer)
+            ->where('status', '!=', OrderStatus::Cancelled)
+            ->count();
+    }
+
+    /**
      * @return Attribute<string, string>
      */
     protected function code(): Attribute
     {
         return Attribute::make(
-            set: fn (string $value): string => strtoupper(trim($value)),
+            set: fn (string $value): string => self::normalizeCode($value),
         );
     }
 }

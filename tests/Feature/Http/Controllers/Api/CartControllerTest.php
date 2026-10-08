@@ -3,6 +3,7 @@
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Product;
+use App\Models\Promotion;
 use App\Models\User;
 use Laravel\Sanctum\Sanctum;
 
@@ -15,6 +16,8 @@ test('cart endpoints return 401 without a token', function (string $method, stri
     'add item' => ['POST', '/api/cart/items'],
     'update item' => ['PATCH', '/api/cart/items/1'],
     'remove item' => ['DELETE', '/api/cart/items/1'],
+    'apply promotion' => ['POST', '/api/cart/promotion'],
+    'remove promotion' => ['DELETE', '/api/cart/promotion'],
 ]);
 
 test('it returns an empty cart without creating one for a customer who has not added anything', function () {
@@ -77,4 +80,34 @@ test('it does not show items from another customer\'s cart', function () {
     $this->getJson('/api/cart')
         ->assertOk()
         ->assertJsonPath('data.items', []);
+});
+
+test('it shows the discount from the applied promotion', function () {
+    $user = User::factory()->create();
+    $promotion = Promotion::factory()->fixed(1500)->create(['code' => 'TAKE15']);
+    $cart = Cart::factory()->for($user)->for($promotion)->create();
+    CartItem::factory()->for($cart)->for(Product::factory()->state(['price' => 5000]))->create(['quantity' => 1]);
+    Sanctum::actingAs($user);
+
+    $this->getJson('/api/cart')
+        ->assertOk()
+        ->assertJsonPath('data.promotion', ['code' => 'TAKE15', 'type' => 'fixed', 'is_valid' => true, 'error' => null])
+        ->assertJsonPath('data.subtotal', '50.00')
+        ->assertJsonPath('data.discount', '15.00')
+        ->assertJsonPath('data.total', '35.00');
+});
+
+test('it reports an applied promotion that is no longer valid and does not discount', function () {
+    $user = User::factory()->create();
+    $promotion = Promotion::factory()->create(['code' => 'BIG100', 'min_cart_amount' => 10000]);
+    $cart = Cart::factory()->for($user)->for($promotion)->create();
+    CartItem::factory()->for($cart)->for(Product::factory()->state(['price' => 5000]))->create(['quantity' => 1]);
+    Sanctum::actingAs($user);
+
+    $this->getJson('/api/cart')
+        ->assertOk()
+        ->assertJsonPath('data.promotion.is_valid', false)
+        ->assertJsonPath('data.promotion.error.code', 'coupon_minimum_not_met')
+        ->assertJsonPath('data.discount', '0.00')
+        ->assertJsonPath('data.total', '50.00');
 });
