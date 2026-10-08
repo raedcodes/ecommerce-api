@@ -19,16 +19,24 @@ class ProductController extends Controller
      */
     public function index(Request $request): AnonymousResourceCollection
     {
-        $validated = $request->validate(['per_page' => ['nullable', 'integer', 'min:1', 'max:100']]);
+        $validated = $request->validate([
+            'per_page' => ['nullable', 'integer', 'min:1', 'max:100']
+        ]);
 
-        return ProductResource::collection(
-            Product::query()->orderByDesc('id')->paginate($validated['per_page'] ?? 15)->withQueryString()
-        );
+        $products = Product::query()
+            ->orderByDesc('id')
+            ->paginate($validated['per_page'] ?? 15)
+            ->withQueryString();
+
+        return ProductResource::collection($products);
     }
 
     public function store(ProductRequest $request): ProductResource
     {
-        return new ProductResource(Product::create($request->productAttributes()));
+        $validated = $request->productAttributes();
+        $product = Product::create($validated);
+
+        return new ProductResource($product);
     }
 
     public function show(Product $product): ProductResource
@@ -38,7 +46,8 @@ class ProductController extends Controller
 
     public function update(ProductRequest $request, Product $product): ProductResource
     {
-        $product->update($request->productAttributes());
+        $validated = $request->productAttributes();
+        $product->update($validated);
 
         return new ProductResource($product);
     }

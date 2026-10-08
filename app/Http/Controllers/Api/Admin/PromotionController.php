@@ -14,11 +14,16 @@ class PromotionController extends Controller
 {
     public function index(Request $request): AnonymousResourceCollection
     {
-        $validated = $request->validate(['per_page' => ['nullable', 'integer', 'min:1', 'max:100']]);
+        $validated = $request->validate([
+            'per_page' => ['nullable', 'integer', 'min:1', 'max:100']
+        ]);
 
-        return PromotionResource::collection(
-            Promotion::query()->orderByDesc('id')->paginate($validated['per_page'] ?? 15)->withQueryString()
-        );
+        $promotions = Promotion::query()
+            ->orderByDesc('id')
+            ->paginate($validated['per_page'] ?? 15)
+            ->withQueryString();
+
+        return PromotionResource::collection($promotions); 
     }
 
     public function store(PromotionRequest $request): PromotionResource
