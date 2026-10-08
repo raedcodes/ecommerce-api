@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\CancelOrderController;
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CartItemController;
 use App\Http\Controllers\Api\CartPromotionController;
@@ -36,4 +37,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('orders', OrderController::class)
         ->only(['index', 'show'])
         ->where(['order' => '[0-9]+']);
+    Route::post('orders/{order}/cancel', CancelOrderController::class)->whereNumber('order')->name('orders.cancel');
 });

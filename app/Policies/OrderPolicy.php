@@ -16,6 +16,14 @@ class OrderPolicy
         return $this->owns($user, $order);
     }
 
+    /**
+     * Customers may only cancel their own orders; whether the status allows it is a separate check.
+     */
+    public function cancel(User $user, Order $order): Response
+    {
+        return $this->owns($user, $order);
+    }
+
     private function owns(User $user, Order $order): Response
     {
         return $order->user_id === $user->id
