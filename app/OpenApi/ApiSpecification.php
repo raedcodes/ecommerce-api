@@ -29,10 +29,10 @@ use OpenApi\Attributes as OA;
     bearerFormat: 'Sanctum token',
     scheme: 'bearer',
 )]
-#[OA\Tag(name: 'Auth', description: 'Customer registration and tokens')]
+#[OA\Tag(name: 'Auth', description: 'Customer registration')]
 #[OA\Tag(name: 'Products', description: 'Public catalog')]
-#[OA\Tag(name: 'Cart', description: 'The authenticated customer\'s cart')]
+#[OA\Tag(name: 'Cart', description: 'Customer\'s cart')]
 #[OA\Tag(name: 'Orders', description: 'Checkout, order history and cancellation')]
-#[OA\Tag(name: 'Admin: Products', description: 'Requires an administrator token')]
-#[OA\Tag(name: 'Admin: Promotions', description: 'Requires an administrator token')]
+#[OA\Tag(name: 'Admin: Products', description: 'Requires an admin token')]
+#[OA\Tag(name: 'Admin: Promotions', description: 'Requires an admin token')]
 final class ApiSpecification {}

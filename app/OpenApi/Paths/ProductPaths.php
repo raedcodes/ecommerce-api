@@ -27,15 +27,15 @@ final class ProductPaths
             ),
             new OA\Parameter(
                 name: 'filter[min_price]',
-                description: 'Minimum price in dollars (inclusive).',
+                description: 'Minimum price in dollars (inclusive), e.g. 10.00.',
                 in: 'query',
-                schema: new OA\Schema(type: 'string', example: '10.00'),
+                schema: new OA\Schema(type: 'string'),
             ),
             new OA\Parameter(
                 name: 'filter[max_price]',
-                description: 'Maximum price in dollars (inclusive); must be at least min_price.',
+                description: 'Maximum price in dollars (inclusive), e.g. 50.00; must be at least min_price.',
                 in: 'query',
-                schema: new OA\Schema(type: 'string', example: '50.00'),
+                schema: new OA\Schema(type: 'string'),
             ),
             new OA\Parameter(
                 name: 'filter[in_stock]',

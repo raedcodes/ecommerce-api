@@ -22,9 +22,9 @@ final class OrderPaths
         parameters: [
             new OA\Parameter(
                 name: 'Idempotency-Key',
-                description: 'Optional, up to 100 characters (letters, numbers, - _ : .). Retrying with the same key returns the original order with status 200.',
+                description: 'Optional, up to 100 characters (letters, numbers, - _ : .), e.g. a UUID generated per checkout attempt. Retrying with the same key returns the original order with status 200; use a new key for each new checkout.',
                 in: 'header',
-                schema: new OA\Schema(type: 'string', maxLength: 100, example: 'checkout-6f1c2a'),
+                schema: new OA\Schema(type: 'string', maxLength: 100),
             ),
         ],
         responses: [
