@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Foundation\Testing\DatabaseTruncation;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -17,6 +18,12 @@ use Tests\TestCase;
 pest()->extend(TestCase::class)
     ->use(RefreshDatabase::class)
     ->in('Feature');
+
+// Separate processes cannot see uncommitted data, so these tests commit for real and truncate instead.
+pest()->extend(TestCase::class)
+    ->use(DatabaseTruncation::class)
+    ->group('concurrency')
+    ->in('Concurrency');
 
 /*
 |--------------------------------------------------------------------------
