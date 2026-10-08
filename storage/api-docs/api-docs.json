@@ -14,7 +14,9 @@
     "paths": {
         "/api/admin/products": {
             "get": {
-                "tags": ["Admin: Products"],
+                "tags": [
+                    "Admin: Products"
+                ],
                 "summary": "List all products, including inactive",
                 "description": "All products, including inactive ones, newest first.",
                 "operationId": "adminListProducts",
@@ -71,7 +73,9 @@
                 ]
             },
             "post": {
-                "tags": ["Admin: Products"],
+                "tags": [
+                    "Admin: Products"
+                ],
                 "summary": "Create a product",
                 "operationId": "adminCreateProduct",
                 "requestBody": {
@@ -122,7 +126,9 @@
         },
         "/api/admin/products/{product}": {
             "get": {
-                "tags": ["Admin: Products"],
+                "tags": [
+                    "Admin: Products"
+                ],
                 "summary": "Show any product",
                 "operationId": "adminShowProduct",
                 "parameters": [
@@ -172,7 +178,9 @@
                 ]
             },
             "patch": {
-                "tags": ["Admin: Products"],
+                "tags": [
+                    "Admin: Products"
+                ],
                 "summary": "Update a product",
                 "description": "Also available as PUT. Send only the fields to change. Products are not deleted; set status to inactive instead.",
                 "operationId": "adminUpdateProduct",
@@ -238,7 +246,9 @@
         },
         "/api/admin/promotions": {
             "get": {
-                "tags": ["Admin: Promotions"],
+                "tags": [
+                    "Admin: Promotions"
+                ],
                 "summary": "List promotions",
                 "operationId": "adminListPromotions",
                 "parameters": [
@@ -294,7 +304,9 @@
                 ]
             },
             "post": {
-                "tags": ["Admin: Promotions"],
+                "tags": [
+                    "Admin: Promotions"
+                ],
                 "summary": "Create a promotion",
                 "operationId": "adminCreatePromotion",
                 "requestBody": {
@@ -345,7 +357,9 @@
         },
         "/api/admin/promotions/{promotion}": {
             "get": {
-                "tags": ["Admin: Promotions"],
+                "tags": [
+                    "Admin: Promotions"
+                ],
                 "summary": "Show a promotion",
                 "operationId": "adminShowPromotion",
                 "parameters": [
@@ -395,7 +409,9 @@
                 ]
             },
             "delete": {
-                "tags": ["Admin: Promotions"],
+                "tags": [
+                    "Admin: Promotions"
+                ],
                 "summary": "Delete a promotion",
                 "description": "Past orders keep their promotion_code snapshot; carts using the code simply lose it.",
                 "operationId": "adminDeletePromotion",
@@ -434,7 +450,9 @@
                 ]
             },
             "patch": {
-                "tags": ["Admin: Promotions"],
+                "tags": [
+                    "Admin: Promotions"
+                ],
                 "summary": "Update a promotion",
                 "description": "Also available as PUT. Send only the fields to change; times_used cannot be set.",
                 "operationId": "adminUpdatePromotion",
@@ -500,7 +518,9 @@
         },
         "/api/auth/register": {
             "post": {
-                "tags": ["Auth"],
+                "tags": [
+                    "Auth"
+                ],
                 "summary": "Register a customer and get a token",
                 "description": "Rate limited to 5 requests per minute per IP.",
                 "operationId": "register",
@@ -564,7 +584,9 @@
         },
         "/api/auth/login": {
             "post": {
-                "tags": ["Auth"],
+                "tags": [
+                    "Auth"
+                ],
                 "summary": "Log in and get a token",
                 "description": "Rate limited to 5 attempts per minute per email and IP. Demo accounts (local seed data): customer@example.com and admin@example.com, password \"password\".",
                 "operationId": "login",
@@ -573,7 +595,10 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "required": ["email", "password"],
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
                                 "properties": {
                                     "email": {
                                         "type": "string",
@@ -629,7 +654,9 @@
         },
         "/api/auth/logout": {
             "post": {
-                "tags": ["Auth"],
+                "tags": [
+                    "Auth"
+                ],
                 "summary": "Revoke the current token",
                 "description": "Revoke only the token used for this request; other devices stay signed in.",
                 "operationId": "logout",
@@ -650,7 +677,9 @@
         },
         "/api/cart": {
             "get": {
-                "tags": ["Cart"],
+                "tags": [
+                    "Cart"
+                ],
                 "summary": "Show the cart",
                 "description": "Read-only: a customer without a cart gets an empty one. The applied promotion is re-evaluated; if it is no longer valid it is reported with its reason and not discounted.",
                 "operationId": "showCart",
@@ -686,7 +715,9 @@
         },
         "/api/cart/items": {
             "post": {
-                "tags": ["Cart"],
+                "tags": [
+                    "Cart"
+                ],
                 "summary": "Add a product to the cart",
                 "description": "Adding a product that is already in the cart increases its quantity. Stock is checked but not reserved.",
                 "operationId": "addCartItem",
@@ -695,7 +726,10 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "required": ["product_id", "quantity"],
+                                "required": [
+                                    "product_id",
+                                    "quantity"
+                                ],
                                 "properties": {
                                     "product_id": {
                                         "type": "integer",
@@ -792,7 +826,9 @@
         },
         "/api/cart/items/{item}": {
             "delete": {
-                "tags": ["Cart"],
+                "tags": [
+                    "Cart"
+                ],
                 "summary": "Remove a cart item",
                 "operationId": "removeCartItem",
                 "parameters": [
@@ -839,7 +875,9 @@
                 ]
             },
             "patch": {
-                "tags": ["Cart"],
+                "tags": [
+                    "Cart"
+                ],
                 "summary": "Change a cart item quantity",
                 "description": "Also available as PUT. Items belonging to other customers return 404 (`cart_item_not_found`).",
                 "operationId": "updateCartItem",
@@ -859,7 +897,9 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "required": ["quantity"],
+                                "required": [
+                                    "quantity"
+                                ],
                                 "properties": {
                                     "quantity": {
                                         "type": "integer",
@@ -955,7 +995,9 @@
         },
         "/api/cart/promotion": {
             "post": {
-                "tags": ["Cart"],
+                "tags": [
+                    "Cart"
+                ],
                 "summary": "Apply a promotional code",
                 "description": "Codes are matched ignoring case and surrounding spaces. Eligibility is checked again at checkout.",
                 "operationId": "applyPromotion",
@@ -964,7 +1006,9 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "required": ["code"],
+                                "required": [
+                                    "code"
+                                ],
                                 "properties": {
                                     "code": {
                                         "type": "string",
@@ -1072,7 +1116,9 @@
                 ]
             },
             "delete": {
-                "tags": ["Cart"],
+                "tags": [
+                    "Cart"
+                ],
                 "summary": "Remove the promotional code",
                 "operationId": "removePromotion",
                 "responses": {
@@ -1107,7 +1153,9 @@
         },
         "/api/checkout": {
             "post": {
-                "tags": ["Orders"],
+                "tags": [
+                    "Orders"
+                ],
                 "summary": "Place an order from the cart",
                 "description": "Takes no body: prices and totals are recalculated on the server from the locked product rows, and anything sent by the client is ignored. Runs in one database transaction with row locks, so concurrent checkouts can never oversell stock or a coupon. Send an Idempotency-Key header to make retries safe.",
                 "operationId": "checkout",
@@ -1115,10 +1163,9 @@
                     {
                         "name": "Idempotency-Key",
                         "in": "header",
-                        "description": "Optional, up to 100 characters (letters, numbers, - _ : .). Retrying with the same key returns the original order with status 200.",
+                        "description": "Optional, up to 100 characters (letters, numbers, - _ : .), e.g. a UUID generated per checkout attempt. Retrying with the same key returns the original order with status 200; use a new key for each new checkout.",
                         "schema": {
                             "type": "string",
-                            "example": "checkout-6f1c2a",
                             "maxLength": 100
                         }
                     }
@@ -1220,7 +1267,9 @@
         },
         "/api/orders": {
             "get": {
-                "tags": ["Orders"],
+                "tags": [
+                    "Orders"
+                ],
                 "summary": "List my orders",
                 "description": "The customer's own orders, newest first.",
                 "operationId": "listOrders",
@@ -1276,7 +1325,9 @@
         },
         "/api/orders/{order}": {
             "get": {
-                "tags": ["Orders"],
+                "tags": [
+                    "Orders"
+                ],
                 "summary": "Show one of my orders",
                 "description": "Orders belonging to other customers return 403 (`forbidden`).",
                 "operationId": "showOrder",
@@ -1329,7 +1380,9 @@
         },
         "/api/orders/{order}/cancel": {
             "post": {
-                "tags": ["Orders"],
+                "tags": [
+                    "Orders"
+                ],
                 "summary": "Cancel an order",
                 "description": "Allowed while pending or processing. Restores the purchased stock and gives back the coupon use. Safe to send more than once: stock is restored exactly once.",
                 "operationId": "cancelOrder",
@@ -1399,7 +1452,9 @@
         },
         "/api/products": {
             "get": {
-                "tags": ["Products"],
+                "tags": [
+                    "Products"
+                ],
                 "summary": "List active products",
                 "description": "Filtering and sorting use the spatie/laravel-query-builder syntax. Unknown filters or sorts return 422. Results are cached per filter combination and refreshed whenever a product or its stock changes.",
                 "operationId": "listProducts",
@@ -1416,19 +1471,17 @@
                     {
                         "name": "filter[min_price]",
                         "in": "query",
-                        "description": "Minimum price in dollars (inclusive).",
+                        "description": "Minimum price in dollars (inclusive), e.g. 10.00.",
                         "schema": {
-                            "type": "string",
-                            "example": "10.00"
+                            "type": "string"
                         }
                     },
                     {
                         "name": "filter[max_price]",
                         "in": "query",
-                        "description": "Maximum price in dollars (inclusive); must be at least min_price.",
+                        "description": "Maximum price in dollars (inclusive), e.g. 50.00; must be at least min_price.",
                         "schema": {
-                            "type": "string",
-                            "example": "50.00"
+                            "type": "string"
                         }
                     },
                     {
@@ -1437,7 +1490,12 @@
                         "description": "true: stock above 0; false: out of stock.",
                         "schema": {
                             "type": "string",
-                            "enum": ["true", "false", "1", "0"]
+                            "enum": [
+                                "true",
+                                "false",
+                                "1",
+                                "0"
+                            ]
                         }
                     },
                     {
@@ -1499,7 +1557,9 @@
         },
         "/api/products/{product}": {
             "get": {
-                "tags": ["Products"],
+                "tags": [
+                    "Products"
+                ],
                 "summary": "Show an active product",
                 "description": "Inactive products return 404 like missing ones.",
                 "operationId": "showProduct",
@@ -1543,7 +1603,10 @@
     "components": {
         "schemas": {
             "Error": {
-                "required": ["message", "code"],
+                "required": [
+                    "message",
+                    "code"
+                ],
                 "properties": {
                     "message": {
                         "type": "string",
@@ -1564,7 +1627,11 @@
                 "type": "object"
             },
             "ValidationError": {
-                "required": ["message", "code", "errors"],
+                "required": [
+                    "message",
+                    "code",
+                    "errors"
+                ],
                 "properties": {
                     "message": {
                         "type": "string",
@@ -1725,7 +1792,10 @@
                     },
                     "status": {
                         "type": "string",
-                        "enum": ["active", "inactive"]
+                        "enum": [
+                            "active",
+                            "inactive"
+                        ]
                     },
                     "created_at": {
                         "type": "string",
@@ -1806,7 +1876,10 @@
                             },
                             "type": {
                                 "type": "string",
-                                "enum": ["percentage", "fixed"]
+                                "enum": [
+                                    "percentage",
+                                    "fixed"
+                                ]
                             },
                             "is_valid": {
                                 "type": "boolean"
@@ -1939,7 +2012,10 @@
                     },
                     "type": {
                         "type": "string",
-                        "enum": ["percentage", "fixed"]
+                        "enum": [
+                            "percentage",
+                            "fixed"
+                        ]
                     },
                     "value": {
                         "description": "Whole percent (integer) for percentage codes; dollar amount (string) for fixed codes.",
@@ -2033,7 +2109,10 @@
                     },
                     "status": {
                         "type": "string",
-                        "enum": ["active", "inactive"]
+                        "enum": [
+                            "active",
+                            "inactive"
+                        ]
                     }
                 },
                 "type": "object"
@@ -2049,7 +2128,10 @@
                     },
                     "type": {
                         "type": "string",
-                        "enum": ["percentage", "fixed"]
+                        "enum": [
+                            "percentage",
+                            "fixed"
+                        ]
                     },
                     "value": {
                         "description": "Whole percent 1–100, or a dollar amount for fixed codes.",
