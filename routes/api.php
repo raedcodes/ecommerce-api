@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CartItemController;
 use App\Http\Controllers\Api\CartPromotionController;
+use App\Http\Controllers\Api\CheckoutController;
 use App\Http\Controllers\Api\ProductController;
 use Illuminate\Support\Facades\Route;
 
@@ -23,9 +24,11 @@ Route::middleware('auth:sanctum')->group(function () {
         ->only(['store', 'update', 'destroy'])
         ->names('cart.items')
         ->where(['item' => '[0-9]+']);
-        
+
     Route::apiSingleton('cart/promotion', CartPromotionController::class)
         ->creatable()
         ->only(['store', 'destroy'])
         ->names('cart.promotion');
+
+    Route::post('checkout', CheckoutController::class)->name('checkout');
 });
