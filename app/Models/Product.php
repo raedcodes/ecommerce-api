@@ -24,6 +24,16 @@ class Product extends Model
      */
     public const SORTABLE_COLUMNS = ['price', 'name', 'created_at'];
 
+    /**
+     * Mirrors the column defaults so freshly created products serialize correctly.
+     *
+     * @var array<string, mixed>
+     */
+    protected $attributes = [
+        'stock_quantity' => 0,
+        'status' => 'active',
+    ];
+
     protected static function booted(): void
     {
         static::saved(fn () => ProductCatalog::invalidate());

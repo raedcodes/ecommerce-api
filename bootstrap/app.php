@@ -7,6 +7,7 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,6 +19,12 @@ return Application::configure(basePath: dirname(__DIR__))
         api: __DIR__.'/../routes/api.php',
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
+        then: function (): void {
+            Route::middleware(['api', 'auth:sanctum', 'can:admin'])
+                ->prefix('api/admin')
+                ->name('admin.')
+                ->group(__DIR__.'/../routes/admin.php');
+        },
     )
     ->withMiddleware(function (Middleware $middleware): void {
         // API-only app: there is no login page, so guests get a 401 instead of a redirect.

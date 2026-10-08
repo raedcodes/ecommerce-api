@@ -29,6 +29,16 @@ class Promotion extends Model
     use HasFactory;
 
     /**
+     * Mirrors the column defaults so freshly created promotions serialize correctly.
+     *
+     * @var array<string, mixed>
+     */
+    protected $attributes = [
+        'times_used' => 0,
+        'is_active' => true,
+    ];
+
+    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>

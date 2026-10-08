@@ -2,9 +2,12 @@
 
 namespace App\Providers;
 
+use App\Models\User;
+use Illuminate\Auth\Access\Response;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
@@ -27,6 +30,10 @@ class AppServiceProvider extends ServiceProvider
         Model::preventLazyLoading(! $this->app->environment('production'));
 
         $this->configureRateLimiting();
+
+        Gate::define('admin', fn (User $user): Response => $user->is_admin
+            ? Response::allow()
+            : Response::deny('This action requires an administrator.'));
     }
 
     /**
