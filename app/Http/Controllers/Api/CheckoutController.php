@@ -14,6 +14,11 @@ class CheckoutController extends Controller
      */
     public function __invoke(CheckoutRequest $request, PlaceOrder $placeOrder): OrderResource
     {
-        return new OrderResource($placeOrder->handle($request->user(), $request->validated('idempotency_key')));
+        $order = $placeOrder->handle(
+            $request->user(), 
+            $request->validated('idempotency_key')
+        );
+
+        return new OrderResource($order);
     }
 }
