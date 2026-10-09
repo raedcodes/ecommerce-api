@@ -7,7 +7,7 @@ use OpenApi\Attributes as OA;
 /**
  * OpenAPI operations for checkout, order history and cancellation.
  *
- * Documentation only; the handlers are App\Http\Controllers\Api\CheckoutController, App\Http\Controllers\Api\OrderController, App\Http\Controllers\Api\CancelOrderController.
+ * Documentation only; the handlers are in App\Http\Controllers\Api\OrderController (index, checkout, show, cancel).
  * tests/Feature/ApiDocumentationTest.php fails if a route is missing here or a documented route no longer exists.
  */
 final class OrderPaths

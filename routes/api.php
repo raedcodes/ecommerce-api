@@ -1,11 +1,9 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\CancelOrderController;
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CartItemController;
 use App\Http\Controllers\Api\CartPromotionController;
-use App\Http\Controllers\Api\CheckoutController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ProductController;
 use Illuminate\Support\Facades\Route;
@@ -34,10 +32,10 @@ Route::middleware('auth:sanctum')->group(function () {
         ->only(['store', 'destroy'])
         ->names('cart.promotion');
 
-    Route::post('checkout', CheckoutController::class)->name('checkout');
+    Route::post('checkout', [OrderController::class, 'checkout'])->name('checkout');
 
     Route::apiResource('orders', OrderController::class)
         ->only(['index', 'show'])
         ->whereNumber('order');
-    Route::post('orders/{order}/cancel', CancelOrderController::class)->whereNumber('order')->name('orders.cancel');
+    Route::post('orders/{order}/cancel', [OrderController::class, 'cancel'])->whereNumber('order')->name('orders.cancel');
 });
