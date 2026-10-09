@@ -7,7 +7,7 @@ use OpenApi\Attributes as OA;
 /**
  * OpenAPI operations for the cart, its items and its promotional code.
  *
- * Documentation only; the handlers are App\Http\Controllers\Api\CartController, App\Http\Controllers\Api\CartItemController, App\Http\Controllers\Api\CartPromotionController.
+ * Documentation only; the handlers are in App\Http\Controllers\Api\CartController (show, addItem, updateItem, removeItem, applyPromotion, removePromotion).
  * tests/Feature/ApiDocumentationTest.php fails if a route is missing here or a documented route no longer exists.
  */
 final class CartPaths
